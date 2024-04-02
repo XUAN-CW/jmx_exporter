@@ -40,39 +40,6 @@ public class JavaAgent {
 
     private static HTTPServer httpServer;
 
-
-    //    public static void main(String[] args) {
-//        try {
-//            Config config = parseConfig("127.0.0.1:16533:/Users/xuanchengwei/my-data/core/java/jmx_exporter/jmx_prometheus_httpserver/src/deb/config/jmx_exporter.yaml");
-//
-////            new BuildInfoMetrics().register(PrometheusRegistry.defaultRegistry);
-////            JvmMetrics.builder().register(PrometheusRegistry.defaultRegistry);
-////            new JmxCollector(new File(config.file), JmxCollector.Mode.STANDALONE)
-////                    .register(PrometheusRegistry.defaultRegistry);
-//            JvmGarbageCollectorMetrics.builder(PrometheusProperties.get()).register(PrometheusRegistry.defaultRegistry);
-//
-//            String host = config.host != null ? config.host : DEFAULT_HOST;
-//
-//            httpServer =
-//                    new HTTPServerFactory()
-//                            .createHTTPServer(
-//                                    InetAddress.getByName(host),
-//                                    config.port,
-//                                    PrometheusRegistry.defaultRegistry,
-//                                    new File(config.file));
-//        } catch (Throwable t) {
-//            synchronized (System.err) {
-//                System.err.println("Failed to start Prometheus JMX Exporter");
-//                System.err.println();
-//                t.printStackTrace();
-//                System.err.println();
-//                System.err.println("Prometheus JMX Exporter exiting");
-//                System.err.flush();
-//            }
-//            System.exit(1);
-//        }
-//    }
-
     public static void agentmain(String agentArgument, Instrumentation instrumentation)
             throws Exception {
         premain(agentArgument, instrumentation);
