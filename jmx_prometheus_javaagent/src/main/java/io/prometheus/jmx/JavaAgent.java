@@ -18,11 +18,8 @@ package io.prometheus.jmx;
 
 import io.prometheus.jmx.common.http.ConfigurationException;
 import io.prometheus.jmx.common.http.HTTPServerFactory;
-import io.prometheus.metrics.config.PrometheusProperties;
 import io.prometheus.metrics.exporter.httpserver.HTTPServer;
-import io.prometheus.metrics.instrumentation.jvm.JvmGarbageCollectorMetrics;
 import io.prometheus.metrics.instrumentation.jvm.JvmMetrics;
-import io.prometheus.metrics.instrumentation.jvm.JvmNativeMemoryMetrics;
 import io.prometheus.metrics.model.registry.PrometheusRegistry;
 import java.io.File;
 import java.lang.instrument.Instrumentation;
@@ -47,38 +44,6 @@ public class JavaAgent {
             throws Exception {
         premain(agentArgument, instrumentation);
     }
-
-//    public static void main(String[] args) {
-//        try {
-//            Config config = parseConfig("127.0.0.1:16533:/Users/xuanchengwei/my-data/core/java/jmx_exporter/jmx_prometheus_httpserver/src/deb/config/jmx_exporter.yaml");
-//
-////            new BuildInfoMetrics().register(PrometheusRegistry.defaultRegistry);
-////            JvmMetrics.builder().register(PrometheusRegistry.defaultRegistry);
-////            new JmxCollector(new File(config.file), JmxCollector.Mode.STANDALONE)
-////                    .register(PrometheusRegistry.defaultRegistry);
-//            JvmGarbageCollectorMetrics.builder(PrometheusProperties.get()).register(PrometheusRegistry.defaultRegistry);
-//
-//            String host = config.host != null ? config.host : DEFAULT_HOST;
-//
-//            httpServer =
-//                    new HTTPServerFactory()
-//                            .createHTTPServer(
-//                                    InetAddress.getByName(host),
-//                                    config.port,
-//                                    PrometheusRegistry.defaultRegistry,
-//                                    new File(config.file));
-//        } catch (Throwable t) {
-//            synchronized (System.err) {
-//                System.err.println("Failed to start Prometheus JMX Exporter");
-//                System.err.println();
-//                t.printStackTrace();
-//                System.err.println();
-//                System.err.println("Prometheus JMX Exporter exiting");
-//                System.err.flush();
-//            }
-//            System.exit(1);
-//        }
-//    }
 
     public static void premain(String agentArgument, Instrumentation instrumentation)
             throws Exception {
