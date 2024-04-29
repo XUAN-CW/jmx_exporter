@@ -18,11 +18,19 @@ package io.prometheus.jmx;
 
 import io.prometheus.jmx.common.http.ConfigurationException;
 import io.prometheus.jmx.common.http.HTTPServerFactory;
+import io.prometheus.metrics.config.PrometheusProperties;
+import io.prometheus.metrics.core.metrics.GaugeWithCallback;
+import io.prometheus.metrics.core.metrics.SummaryWithCallback;
 import io.prometheus.metrics.exporter.httpserver.HTTPServer;
+import io.prometheus.metrics.instrumentation.jvm.JvmGarbageCollectorMetrics;
 import io.prometheus.metrics.instrumentation.jvm.JvmMetrics;
 import io.prometheus.metrics.model.registry.PrometheusRegistry;
+import io.prometheus.metrics.model.snapshots.Quantiles;
+import io.prometheus.metrics.model.snapshots.Unit;
+
 import java.io.File;
 import java.lang.instrument.Instrumentation;
+import java.lang.management.GarbageCollectorMXBean;
 import java.net.InetAddress;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +47,53 @@ public class JavaAgent {
     private static final String DEFAULT_HOST = "0.0.0.0";
 
     private static HTTPServer httpServer;
+
+        public static void main(String[] args) {
+        try {
+            Config config = parseConfig("127.0.0.1:16533:/Users/xuanchengwei/my-data/core/java/jmx_exporter/jmx_prometheus_httpserver/src/deb/config/jmx_exporter.yaml");
+
+            JvmGarbageCollectorMetrics.builder(PrometheusProperties.get()).register(PrometheusRegistry.defaultRegistry);
+
+            GaugeWithCallback.builder(PrometheusProperties.get())
+                    .name("test")
+                    .help("Time spent in a given JVM garbage collector in seconds.")
+                    .labelNames("thread_pool","status") // Add the "random" label
+                    .callback(callback -> {
+                        String[] threadPoolArray = new String[]{"default","dubbo"};
+                        String[] threadPoolStatusArray = new String[]{"OK","ERROR"};
+                        for (String tp : threadPoolArray) {
+                            for (String s : threadPoolStatusArray) {
+                                // Generate a random value for the "random" label
+                                int randomValue = (int) (Math.random() * 100);
+                                callback.call(randomValue, tp, s);
+                            }
+                        }
+
+                    })
+                    .register(PrometheusRegistry.defaultRegistry);
+
+
+            String host = config.host != null ? config.host : DEFAULT_HOST;
+
+            httpServer =
+                    new HTTPServerFactory()
+                            .createHTTPServer(
+                                    InetAddress.getByName(host),
+                                    config.port,
+                                    PrometheusRegistry.defaultRegistry,
+                                    new File(config.file));
+        } catch (Throwable t) {
+            synchronized (System.err) {
+                System.err.println("Failed to start Prometheus JMX Exporter");
+                System.err.println();
+                t.printStackTrace();
+                System.err.println();
+                System.err.println("Prometheus JMX Exporter exiting");
+                System.err.flush();
+            }
+            System.exit(1);
+        }
+    }
 
     public static void agentmain(String agentArgument, Instrumentation instrumentation)
             throws Exception {
