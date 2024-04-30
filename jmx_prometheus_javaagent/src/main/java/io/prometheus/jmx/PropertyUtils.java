@@ -9,9 +9,6 @@ import java.lang.reflect.Method;
  * @author xuanchengwei
  */
 public class PropertyUtils {
-
-
-
     public static String getProperty(String propertyName) throws Exception {
         ApplicationContext ctx = getApplicationContext();
         Environment env = ctx.getBean(Environment.class);
