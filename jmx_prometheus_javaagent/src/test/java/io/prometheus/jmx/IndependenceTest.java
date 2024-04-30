@@ -43,7 +43,6 @@ public class IndependenceTest {
                         String[] threadPoolStatusArray = new String[]{"OK","ERROR"};
                         for (String tp : threadPoolArray) {
                             for (String s : threadPoolStatusArray) {
-                                // Generate a random value for the "random" label
                                 int randomValue = (int) (Math.random() * 100);
                                 callback.call(randomValue, tp, s);
                             }
