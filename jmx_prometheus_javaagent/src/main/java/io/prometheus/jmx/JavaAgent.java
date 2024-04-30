@@ -57,7 +57,7 @@ public class JavaAgent {
             GaugeWithCallback.builder(PrometheusProperties.get())
                     .name("thread_pool_status")
                     .help("test thread_pool_status")
-                    .labelNames("thread_pool","status") // Add the "random" label
+                    .labelNames("thread_pool","status")
                     .callback(callback -> {
                         String[] threadPoolArray = new String[]{"default","dubbo"};
                         String[] threadPoolStatusArray = new String[]{"OK","ERROR"};
