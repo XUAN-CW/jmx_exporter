@@ -48,8 +48,7 @@ public class IndependenceTest {
                             }
                         }
 
-                    })
-                    .register(PrometheusRegistry.defaultRegistry);
+                    }).register(PrometheusRegistry.defaultRegistry);
 
 
             String host = config.host != null ? config.host : DEFAULT_HOST;
