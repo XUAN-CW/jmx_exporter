@@ -55,8 +55,8 @@ public class JavaAgent {
             JvmGarbageCollectorMetrics.builder(PrometheusProperties.get()).register(PrometheusRegistry.defaultRegistry);
 
             GaugeWithCallback.builder(PrometheusProperties.get())
-                    .name("test")
-                    .help("Time spent in a given JVM garbage collector in seconds.")
+                    .name("thread_pool_status")
+                    .help("test thread_pool_status")
                     .labelNames("thread_pool","status") // Add the "random" label
                     .callback(callback -> {
                         String[] threadPoolArray = new String[]{"default","dubbo"};
